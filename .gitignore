@@ -1,48 +1,56 @@
-# Wordpress - ignore core, configuration, examples, uploads and logs.
-# https://github.com/github/gitignore/blob/main/WordPress.gitignore
+# ========================
+# Node.js / Next.js
+# ========================
+/dashboard/node_modules/
+/dashboard/.next/
+/dashboard/dist/
+/dashboard/npm-debug.log*
+/dashboard/yarn-debug.log*
+/dashboard/yarn-error.log*
+/dashboard/package-lock.json
+/dashboard/.pnpm-debug.log*
+/dashboard/*.tsbuildinfo
 
-# Core
-#
-# Note: if you want to stage/commit WP core files
-# you can delete this whole section/until Configuration.
-/wp-admin/
-/wp-content/index.php
-/wp-content/languages
-/wp-content/plugins/index.php
-/wp-content/themes/index.php
-/wp-includes/
-/index.php
-/license.txt
-/readme.html
-/wp-*.php
-/xmlrpc.php
+# Tailwind / PostCSS cache
+/dashboard/.postcssrc
+/dashboard/tailwind.config.js.lock
 
-# Configuration
-wp-config.php
+# ========================
+# Docker / Volumes
+# ========================
+# Ignore local Docker volumes
+wordpress_data/
+db_data/
+mongo_data/
 
-# Example themes
-/wp-content/themes/twenty*/
-
-# Example plugin
-/wp-content/plugins/hello.php
-
-# Uploads
-/wp-content/uploads/
-
-# Log files
+# Ignore container files
+*.pid
+*.seed
+*.sock
 *.log
+*.tmp
 
-# htaccess
-/.htaccess
+# ========================
+# WordPress
+# ========================
+# Ignore WP auto-generated content
+wordpress/wp-content/uploads/
+wordpress/wp-content/cache/
+wordpress/wp-content/upgrade/
 
-# All plugins
-#
-# Note: If you wish to whitelist plugins,
-# uncomment the next line
-#/wp-content/plugins
+# Plugins & Themes (only if you install directly inside container)
+wordpress/wp-content/plugins/*
+wordpress/wp-content/themes/*
 
-# All themes
-#
-# Note: If you wish to whitelist themes,
-# uncomment the next line
-#/wp-content/themes
+# BUT keep custom theme/plugin if you create one
+!wordpress/wp-content/plugins/my-custom-plugin/
+!wordpress/wp-content/themes/my-custom-theme/
+
+# ========================
+# System / Editor files
+# ========================
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
