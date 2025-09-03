@@ -47,7 +47,9 @@ This will start:
 
 ---
 
-## 🟢 4. Optional: Import existing WooCommerce database
+## 🟢 4. Adding / Importing Data
+
+### 4.1 MySQL (WordPress / WooCommerce)
 
 If you have an existing database dump (`db_dump.sql`):
 
@@ -55,12 +57,52 @@ If you have an existing database dump (`db_dump.sql`):
 # Copy the dump into the DB container
 docker cp db_dump.sql ambaturintechnologia-db-1:/db_dump.sql
 
-# Import the dump
-docker exec -i ambaturintechnologia-db-1 \
-  mysql -u wp_user -p wp_db < /db_dump.sql
+# Import the dump into the WordPress database
+docker exec -i ambaturintechnologia-db-1   mysql -u wp_user -pwp_pass wp_db < /db_dump.sql
+
+# Export (Dump) the current DB
+docker exec ambaturintechnologia-db-1 mysqldump -u wp_user -p wp_db > db_backup.sql
 ```
 
-Password for `wp_user` is defined in `docker-compose.yml` (`wp_pass`).
+Where:
+- `wp_user` and `wp_pass` are set in `docker-compose.yml`
+- `wp_db` is the database name
+
+You can also use **phpMyAdmin** at [http://localhost:8081](http://localhost:8081)  
+Login with:
+- Server: `db`
+- Username: `root`
+- Password: `rootpass`
+
+---
+
+### 4.2 MongoDB (Next.js Dashboard)
+
+If you have a MongoDB dump (`mongo_dump/`):
+
+```bash
+# Copy the dump folder into the MongoDB container
+docker cp mongo_dump ambaturintechnologia-mongodb-1:/mongo_dump
+
+# Restore the dump into MongoDB
+docker exec -i ambaturintechnologia-mongodb-1   mongorestore /mongo_dump
+```
+
+Or to dump/export from the container:
+
+```bash
+# Export current DB
+docker exec ambaturintechnologia-mongodb-1   mongodump --out /data/backup
+
+# Copy backup to host
+docker cp ambaturintechnologia-mongodb-1:/data/backup ./mongo_backup
+```
+
+Default MongoDB URL inside your app is:
+
+```
+mongodb://localhost:27017
+```
 
 ---
 
@@ -96,3 +138,4 @@ docker-compose down -v
 * Do **not commit Docker volumes or WordPress uploads** to GitHub. `.gitignore` handles this.
 * Next.js hot-reloading works automatically when editing `/dashboard` files.
 * Use `docker logs -f <container>` to debug services if needed.
+* Always use `mysqldump` / `mongodump` for backups instead of committing raw DB folders.

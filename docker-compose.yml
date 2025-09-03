@@ -11,7 +11,7 @@ services:
       WORDPRESS_DB_PASSWORD: wp_pass
       WORDPRESS_DB_NAME: wp_db
     volumes:
-      - wordpress_data:/var/www/html
+      - ./wordpress:/var/www/html
     depends_on:
       - db
 
@@ -23,7 +23,7 @@ services:
       MYSQL_USER: wp_user
       MYSQL_PASSWORD: wp_pass
     volumes:
-      - db_data:/var/lib/mysql
+      - ./mysql:/var/lib/mysql
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
@@ -40,7 +40,7 @@ services:
     ports:
       - "27017:27017"
     volumes:
-      - mongo_data:/data/db
+      - ./mongo:/data/db
 
   nextjs:
     build: ./dashboard
@@ -54,8 +54,3 @@ services:
     depends_on:
       - mongodb
       - wordpress
-
-volumes:
-  wordpress_data:
-  db_data:
-  mongo_data:
